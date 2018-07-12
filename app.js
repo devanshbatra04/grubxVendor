@@ -5,6 +5,7 @@ const express                = require('express'),
     localStrategy            = require('passport-local'),
     passportLocalMongoose    = require('passport-local-mongoose');
 
+var app = express();
 
 let http                     = require('http').Server(app),
     User                     = require('./models/user'),
@@ -13,8 +14,6 @@ let http                     = require('http').Server(app),
 
 mongoose.connect("mongodb://localhost/grubxVendor");
 
-
-var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -103,11 +102,14 @@ function ensureLoggedIn() {
     }
 }
 
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+});
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var port = process.env.PORT || 5001;
 
-
-app.listen(port, function(){
-    console.log("Running on port " + port);
+http.listen(port, function(){
+    console.log('listening on *:' + port);
 });

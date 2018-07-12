@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var order = mongoose.Schema({
+var orderSchema = mongoose.Schema({
 
 });
 
