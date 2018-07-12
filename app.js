@@ -7,7 +7,7 @@ const express                = require('express'),
 
 var User = require('./models/user');
 
-mongoose.connect("mongodb://localhost/Evenox");
+mongoose.connect("mongodb://localhost/grubxVendor");
 
 
 var app = express();
@@ -82,7 +82,19 @@ app.get("/logout",function(req,res){
 });
 
 
-
+function ensureLoggedIn() {
+    return function(req, res, next) {
+        // isAuthenticated is set by `deserializeUser()`
+        if (!req.isAuthenticated || !req.isAuthenticated()) {
+            res.status(401).send({
+                success: false,
+                message: 'You need to be authenticated to access this page!'
+            })
+        } else {
+            next()
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
