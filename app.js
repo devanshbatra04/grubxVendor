@@ -5,7 +5,10 @@ const express                = require('express'),
     localStrategy            = require('passport-local'),
     passportLocalMongoose    = require('passport-local-mongoose');
 
-var User = require('./models/user');
+
+let http                     = require('http').Server(app),
+    User                     = require('./models/user'),
+    Order                    = require('./models/order');
 
 mongoose.connect("mongodb://localhost/grubxVendor");
 
