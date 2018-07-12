@@ -81,6 +81,7 @@ app.get("/logout",function(req,res){
     res.redirect("/");
 });
 
+app.use(ensureLoggedIn());
 
 function ensureLoggedIn() {
     return function(req, res, next) {
