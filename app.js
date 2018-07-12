@@ -44,7 +44,8 @@ app.post("/register", function(req,res){
         username : req.body.username,
         email : req.body.email,
         name: req.body.name,
-        phoneNumber: req.body.phone
+        phoneNumber: req.body.phone,
+        canteenNum: req.body.canteenNum
     }), req.body.password, function(err, user){
         if (err){
             console.log(err);
