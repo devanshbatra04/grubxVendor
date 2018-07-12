@@ -9,6 +9,7 @@ const express                = require('express'),
 let http                     = require('http').Server(app),
     User                     = require('./models/user'),
     Order                    = require('./models/order');
+    io                       = require('socket.io')(http);
 
 mongoose.connect("mongodb://localhost/grubxVendor");
 
