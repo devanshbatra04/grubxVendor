@@ -61,9 +61,6 @@ app.post("/register", function(req,res){
     console.log("Posted");
 });
 
-app.get("/secret", function(req,res){
-    res.render("secret");
-});
 
 app.get("/login", function(req,res){
     res.render('login');
@@ -82,6 +79,10 @@ app.get("/logout",function(req,res){
 });
 
 app.use(ensureLoggedIn());
+
+app.get("/secret", function(req,res){
+    res.render("secret");
+});
 
 function ensureLoggedIn() {
     return function(req, res, next) {
