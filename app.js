@@ -18,13 +18,15 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 
-let canteenTest = null;
 app.use(require("express-session")({
     secret: "Please work this time",
     resave : false,
     saveUninitialized: false
 }));
-
+let canteens = {
+    testCanteen: null,
+    JC: null
+}
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -65,7 +67,6 @@ app.post("/register", function(req,res){
     console.log("Posted");
 });
 
-
 app.get("/login", function(req,res){
     res.render('login');
 });
@@ -91,21 +92,42 @@ io.on('connection', function(socket){
     console.log('a user connected');
     // canteenTest = socket;
     socket.on("new Connection", function(data){
-        console.log("received");
-    })
+        // socket.manager.onClientDisconnect(socket.id);
 
-    app.get("/order", (req,res)=>{
-        socket.emit("order", "made order");
-        // console.log(canteenTest)
-    })
+        canteens[data] = socket.id;
+        socket.canteenName = data;
+        console.log(canteens);
+
+        app.get("/order", (req,res)=>{
+            socket.emit("order", "made order");
+            // console.log(canteenTest)
+            console.log("new order canteen online");
+        });
+        app.post("/order", (req,res)=> {
+            console.log(socket.canteenName, req.body.canteen);
+
+            if (req.body.canteen === socket.canteenName) {
+                socket.emit("order", req.body);
+                res.send(req.body);
+            }
+
+        });
+
+
+    });
+
 
     socket.on('disconnect', function(){
         console.log('user disconnected');
-        canteenTest = null;
+        console.log(socket.canteenName);
+        canteens[socket.canteenName] = null;
+        console.log(canteens);
     });
 });
-
-app.use(ensureLoggedIn());
+app.get("/order", (req,res)=>{
+    // console.log(canteenTest)
+    console.log("new order");
+});
 
 
 
