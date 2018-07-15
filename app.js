@@ -108,9 +108,9 @@ io.on('connection', function(socket){
             req.body.status = 0;
             let newOrder = new Order(req.body);
             newOrder.save(function(err, order){
-                console.log(order);
                 if (req.body.canteen === socket.canteenName) {
                     socket.emit("post-order", order);
+                    console.log(socket.id);
                     res.send(order);
                 }
             });
