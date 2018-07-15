@@ -105,12 +105,14 @@ io.on('connection', function(socket){
         });
         app.post("/order", (req,res)=> {
             console.log(socket.canteenName, req.body.canteen);
+            Order.create(req.body, function(err,order){
+                console.log(order);
+                if (req.body.canteen === socket.canteenName) {
+                    socket.emit("post-order", order);
+                    res.send(order);
+                }
+            })
 
-            if (req.body.canteen === socket.canteenName) {
-                console.log(socket);
-                socket.emit("post-order", req.body);
-                res.send(req.body);
-            }
 
         });
 
