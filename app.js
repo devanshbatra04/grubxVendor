@@ -105,13 +105,15 @@ io.on('connection', function(socket){
         });
         app.post("/order", (req,res)=> {
             console.log(socket.canteenName, req.body.canteen);
-            Order.create(req.body, function(err,order){
+            req.body.status = 0;
+            let newOrder = new Order(req.body);
+            newOrder.save(function(err, order){
                 console.log(order);
                 if (req.body.canteen === socket.canteenName) {
                     socket.emit("post-order", order);
                     res.send(order);
                 }
-            })
+            });
 
 
         });

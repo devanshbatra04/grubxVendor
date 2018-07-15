@@ -5,7 +5,8 @@ var orderSchema = mongoose.Schema({
     cust_name: String,
     contact: String,
     totals: Number,
-    delivery_time: String
+    delivery_time: String,
+    status: Number
 });
 
 var Order = mongoose.model("order", orderSchema);
