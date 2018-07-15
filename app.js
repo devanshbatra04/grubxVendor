@@ -107,7 +107,7 @@ io.on('connection', function(socket){
             console.log(socket.canteenName, req.body.canteen);
 
             if (req.body.canteen === socket.canteenName) {
-                socket.emit("order", req.body);
+                socket.emit("post-order", req.body);
                 res.send(req.body);
             }
 
