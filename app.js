@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+let canteenTest = null;
 app.use(require("express-session")({
     secret: "Please work this time",
     resave : false,
@@ -82,11 +82,32 @@ app.get("/logout",function(req,res){
     res.redirect("/");
 });
 
+app.get("/secret", ensureLoggedIn(), function(req,res){
+    res.render("secret", {user:req.user});
+
+});
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+    // canteenTest = socket;
+    socket.on("new Connection", function(data){
+        console.log("received");
+    })
+
+    app.get("/order", (req,res)=>{
+        socket.emit("order", "made order");
+        // console.log(canteenTest)
+    })
+
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+        canteenTest = null;
+    });
+});
+
 app.use(ensureLoggedIn());
 
-app.get("/secret", function(req,res){
-    res.render("secret");
-});
+
 
 function ensureLoggedIn() {
     return function(req, res, next) {
@@ -101,16 +122,7 @@ function ensureLoggedIn() {
         }
     }
 }
-app.get("/order", (req,res)=>{
-    io.emit("order", "made order");
-})
 
-io.on('connection', function(socket){
-    console.log('a user connected');
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-    });
-});
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var port = process.env.PORT || 5001;

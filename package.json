@@ -1,7 +1,7 @@
 {
-  "name": "evenoxwebapp",
+  "name": "grubx-vendor",
   "version": "1.0.0",
-  "description": "Repository for Evenox App Backend",
+  "description": "Repository for Grubx vendor Backend",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
