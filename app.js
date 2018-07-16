@@ -97,27 +97,29 @@ io.on('connection', function(socket){
         canteens[data] = socket.id;
         socket.canteenName = data;
         console.log(canteens);
-
-        app.get("/order", (req,res)=>{
-            socket.emit("order", "made order");
-            // console.log(canteenTest)
-            console.log("new order canteen online");
+        Order.find({canteen: socket.canteenName}, function(err, orders){
+            socket.emit("all orders", orders);
         });
-        app.post("/order", (req,res)=> {
-            console.log(socket.canteenName, req.body.canteen);
-            req.body.status = 0;
-            let newOrder = new Order(req.body);
-            newOrder.save(function(err, order){
-                if (req.body.canteen === socket.canteenName) {
-                    socket.emit("post-order", order);
-                    console.log(socket.id);
-                    res.send(order);
-                }
+
+            app.get("/order", (req, res) => {
+                socket.emit("order", "made order");
+                // console.log(canteenTest)
+                console.log("new order canteen online");
             });
+            app.post("/order", (req, res) => {
+                console.log(socket.canteenName, req.body.canteen);
+                req.body.status = 0;
+                let newOrder = new Order(req.body);
+                newOrder.save(function (err, order) {
+                    if (canteens[req.body.canteen] != null) {
+                        io.to(canteens[req.body.canteen]).emit("post-order", order);
+                        console.log(socket.id);
+                        res.send(order);
+                    }
+                });
 
 
-        });
-
+            });
 
     });
 
