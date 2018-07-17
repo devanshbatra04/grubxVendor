@@ -141,7 +141,7 @@ io.on('connection', function(socket){
                 if (order === null ) res.sendStatus(404);
                 order.status = 2;
                 if (canteens[req.body.canteen] != null) {
-                    io.to(canteens[req.body.canteen]).emit("new payment", req.body.id);
+                    io.to(canteens[req.body.canteen]).emit("new payment", order);
                     res.status(200).send(order);
                 }
             });
