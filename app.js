@@ -68,12 +68,17 @@ app.post("/register", function(req,res){
     console.log("Posted");
 });
 app.post('/confirm', function(req,res){
-    console.log(req.body);
     Order.findByIdAndUpdate(req.body.id, {status:1}, function(err,order){
         order.status = 1;
         res.status(200).send(order);
     })
-})
+});
+app.post('/cancel', function(req,res){
+    Order.findByIdAndUpdate(req.body.id, {status:-1}, function(err,order){
+        order.status = -1;
+        res.status(200).send(order);
+    })
+});
 app.get("/login", function(req,res){
     res.render('login');
 });
