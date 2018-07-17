@@ -66,7 +66,9 @@ app.post("/register", function(req,res){
     });
     console.log("Posted");
 });
-
+app.post('/confirm', function(req,res){
+    res.sendStatus(200);
+})
 app.get("/login", function(req,res){
     res.render('login');
 });
