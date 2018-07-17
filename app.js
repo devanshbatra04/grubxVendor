@@ -130,6 +130,23 @@ io.on('connection', function(socket){
                     }
                 });
 
+                    // console.log(canteenTest)
+                });
+        app.post("/payment", (req, res) => {
+            Order.findByIdAndUpdate(req.body.id, {status:2}, function(err,order){
+                if (err) {
+                    console.log(err);
+                    res.sendStatus(400);
+                }
+                if (order === null ) res.sendStatus(404);
+                order.status = 2;
+                if (canteens[req.body.canteen] != null) {
+                    io.to(canteens[req.body.canteen]).emit("new payment", req.body.id);
+                    res.status(200).send(order);
+                }
+            });
+
+
 
             });
 
