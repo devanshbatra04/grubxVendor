@@ -116,7 +116,10 @@
                 options = "order awaiting pickup"
             }
 
-                let ul = "khali";
+            let ul = "";
+            data.items.forEach(function(item){
+                ul+= `<li>${item.name} <strong>${item.qty}</strong> x ₹${item.price}</li>`
+            })
                 let toAppend = `<div class="row" id="${data._id}">
                     <div class="cell">
                     1
