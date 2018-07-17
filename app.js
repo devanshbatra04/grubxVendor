@@ -95,6 +95,19 @@ app.post('/login', passport.authenticate("local", {
 }),function(req,res){
 
 });
+app.post('/getOrders', function(req, res){
+    const canteenName = req.user.username;
+    Order.find({
+        'canteen': canteenName
+    }, function(err, orders){
+        if (err) {
+            console.log(err);
+            res.send(400);
+        }
+        res.render(OrderView, {orders})
+
+    })
+});
 app.get('/dashboard',function(req, res){
     res.render('dashboard');
 })
