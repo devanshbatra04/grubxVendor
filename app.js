@@ -79,6 +79,12 @@ app.post('/cancel', function(req,res){
         res.status(200).send(order);
     })
 });
+app.post('/complete', function(req,res){
+    Order.findByIdAndUpdate(req.body.id, {status:100}, function(err,order){
+        order.status = 100;
+        res.status(200).send(order);
+    })
+});
 app.get("/login", function(req,res){
     res.render('login');
 });
