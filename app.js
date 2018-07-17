@@ -70,8 +70,8 @@ app.post("/register", function(req,res){
 app.post('/confirm', function(req,res){
     console.log(req.body);
     Order.findByIdAndUpdate(req.body.id, {status:1}, function(err,order){
-        console.log(order);
-        res.sendStatus(200);
+        order.status = 1;
+        res.status(200).send(order);
     })
 })
 app.get("/login", function(req,res){
