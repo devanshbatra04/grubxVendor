@@ -95,19 +95,23 @@ app.post('/login', passport.authenticate("local", {
 }),function(req,res){
 
 });
-app.post('/getOrders', function(req, res){
+app.get('/getOrders', ensureLoggedIn(), function(req, res){
+    res.render("OrderView")
     const canteenName = req.user.username;
+
+});
+app.get('/getCanteenOrders', function(req,res){
     Order.find({
-        'canteen': canteenName
+        'canteen': req.user.username
     }, function(err, orders){
         if (err) {
             console.log(err);
-            res.send(400);
         }
-        res.render(OrderView, {orders})
-
+        console.log(orders);
+        res.send(orders);
     })
-});
+    // res.send(200);
+})
 app.get('/dashboard',function(req, res){
     res.render('dashboard');
 })
