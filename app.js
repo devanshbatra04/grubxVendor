@@ -17,6 +17,7 @@ mongoose.connect("mongodb://localhost/grubxVendor");
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(require("express-session")({
     secret: "Please work this time",
@@ -67,7 +68,11 @@ app.post("/register", function(req,res){
     console.log("Posted");
 });
 app.post('/confirm', function(req,res){
-    res.sendStatus(200);
+    console.log(req.body);
+    Order.findByIdAndUpdate(req.body.id, {status:1}, function(err,order){
+        console.log(order);
+        res.sendStatus(200);
+    })
 })
 app.get("/login", function(req,res){
     res.render('login');
