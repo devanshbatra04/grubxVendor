@@ -144,20 +144,31 @@ io.on('connection', function(socket){
                 // console.log(canteenTest)
                 console.log("new order canteen online");
             });
-            app.post("/order", (req, res) => {
-                console.log(socket.canteenName, req.body.canteen);
-                req.body.status = 0;
-                let newOrder = new Order(req.body);
-                newOrder.save(function (err, order) {
-                    if (canteens[req.body.canteen] != null) {
-                        io.to(canteens[req.body.canteen]).emit("post-order", order);
-                        console.log(socket.id);
-                        res.send(order);
-                    }
-                });
+        app.post("/order", (req, res) => {
+            console.log(req.body);
+            if (typeof(req.body.items) === "string") {
+                req.body.items = JSON.parse(req.body.items);
+                // console.log(req.body);
+            }
+            req.body.status = 0;
+            let newOrder = new Order(req.body);
+            newOrder.save(function (err, order) {
+                console.log(order);
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                if (canteens[req.body.canteen] != null) {
+                    io.to(canteens[req.body.canteen]).emit("post-order", order);
+                    console.log(socket.id);
 
-                    // console.log(canteenTest)
-                });
+
+                    res.send(order);
+                }
+            });
+
+        });
+
         app.post("/payment", (req, res) => {
             Order.findByIdAndUpdate(req.body.id, {status:2}, function(err,order){
                 if (err) {
