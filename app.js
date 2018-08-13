@@ -168,6 +168,16 @@ io.on('connection', function(socket){
             });
 
         });
+        app.post("/throwOrder", function(req, res){
+            if (canteens[req.body.canteen] != null) {
+                io.to(canteens[req.body.canteen]).emit("post-order", req.body);
+                console.log(socket.id);
+
+
+                res.send(order);
+            }
+
+        })
 
         app.post("/payment", (req, res) => {
             Order.findByIdAndUpdate(req.body.id, {status:2}, function(err,order){
@@ -202,6 +212,18 @@ app.get("/order", (req,res)=>{
     console.log("new order");
 });
 
+app.post("/payment", (req, res) => {
+    Order.findByIdAndUpdate(req.body.id, {status:2}, function(err,order){
+        if (err) {
+            console.log(err);
+            res.sendStatus(400);
+        }
+        if (order === null ) res.sendStatus(404);
+        order.status = 2;
+        res.status(200).send(order);
+
+    });
+});
 
 
 function ensureLoggedIn() {
